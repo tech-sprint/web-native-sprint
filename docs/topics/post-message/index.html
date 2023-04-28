@@ -7,12 +7,47 @@
   <title>Document</title>
 </head>
 <body>
-  post-message
+  <h1>post-message</h1>
+
+  <h2> 操作 </h2>
+  <div>
+    <button onclick="openWinA()">openWinA</button>
+    <button onclick="closeWinA()">closeWinA</button>
+  </div>
+  <br />
+  <div>
+    <input id="message2a" value="打开 a" type="text">
+    <button onclick="sendMessage2winA()">sendMessage2winA</button>
+  </div>
+
+  <h2> 收到 a 回的消息 </h2>
+  <div id="a-message"></div>
 
   <script>
     window.addEventListener('message', (event) => {
-      console.log('event', event);
-    });
+      if (event.origin !== window.location.origin) {
+        throw new Error('origin error')
+      }
+      console.log('event', event)
+      document.getElementById('a-message').innerHTML = event.data.message
+    })
+
+    let winA = null
+
+    window.openWinA = function openWinA() {
+      winA = window.open('a.html', 'winA')
+    }
+
+    window.closeWinA = function closeWinA() {
+      winA.close()
+      winA = null
+    }
+
+    window.sendMessage2winA = function sendMessage2winA() {
+      if (!winA) return alert('请先打开 a')
+      const message = document.getElementById('message2a').value
+      winA.postMessage({ message }, 'http://127.0.0.1:8080')
+    }
   </script>
 </body>
 </html>
