@@ -5,9 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="./rpc.js"></script>
 </head>
 <body>
-  <h1>post-message</h1>
+  <h1>post-message-rpc</h1>
 
   <h2> 操作 </h2>
   <div>
@@ -16,22 +17,16 @@
   </div>
   <br />
   <div>
-    <input id="message2a" value="打开 a" type="text">
-    <button onclick="sendMessage2winA()">sendMessage2winA</button>
+    <input id="name" value="weineel" type="text" placeholder="name">
+    <input id="age" value="30" type="text" placeholder="age">
+    <button onclick="setIndexNameAndAge()">在 a 页面设置名称和年龄 </button>
+    <button onclick="setIndexNameAndAgeAsync()">在 a 页面设置名称和年龄（异步函数） </button>
   </div>
 
-  <h2> 收到 a 回的消息 </h2>
-  <div id="a-message"></div>
+  <h2> 远程调用 WinA 的结果： </h2>
+  <div id="a-result"></div>
 
   <script>
-    window.addEventListener('message', (event) => {
-      if (event.origin !== window.location.origin) {
-        throw new Error('origin error')
-      }
-      console.log('event', event)
-      document.getElementById('a-message').innerHTML = event.data.message
-    })
-
     let winA = null
 
     window.openWinA = function openWinA() {
@@ -43,10 +38,29 @@
       winA = null
     }
 
-    window.sendMessage2winA = function sendMessage2winA() {
+    async function rpc4a(method) {
       if (!winA) return alert('请先打开 a')
-      const message = document.getElementById('message2a').value
-      winA.postMessage({ message }, 'http://127.0.0.1:8080')
+      const name = document.getElementById('name').value
+      const age = document.getElementById('age').value
+      try {
+        const rt = await rpc(winA, {
+          method,
+          params: [name, age],
+        })
+        console.log('rt', rt)
+        document.getElementById('a-result').innerHTML = rt
+      } catch (error) {
+        alert('error')
+        console.error(error)
+      }
+    }
+
+    window.setIndexNameAndAge = async function() {
+      return rpc4a('setIndexNameAndAge')
+    }
+
+    window.setIndexNameAndAgeAsync = async function() {
+      return rpc4a('setIndexNameAndAgeAsync')
     }
   </script>
 </body>

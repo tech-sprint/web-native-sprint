@@ -8,24 +8,27 @@
   <script src="./rpc.js"></script>
 </head>
 <body>
-  <h1>post-message: a</h1>
+  <h1>post-message-rpc: a</h1>
   <div>
-    <span>从首页收到消息: </span>
     <span id="message-from-index"></span>
   </div>
 
   <script>
-    window.addEventListener('message', (event) => {
-      if (event.origin !== window.location.origin) {
-        throw new Error('origin error')
-      }
-      console.log('event', event);
-      // event.source === window.opener
-      if (event.data.message) {
-        document.getElementById('message-from-index').innerHTML = event.data.message
-        event.source.postMessage({ message: `我是a，收到了你的消息 ${event.data.message}` }, 'http://127.0.0.1:8080')
-      }
-    });
+    function setIndexNameAndAge(name, age) {
+      document.getElementById('message-from-index').innerHTML = `我是 ${name}，今年 ${age} 岁`
+      return `我是 a, 知道了你是 ${name}，今年 ${age} 岁`
+    }
+    registerRpcFunc({
+      setIndexNameAndAge,
+      // 异步函数
+      setIndexNameAndAgeAsync: function (name, age) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(setIndexNameAndAge(name, age))
+          }, 2000)
+        })
+      },
+    })
   </script>
 </body>
 </html>
