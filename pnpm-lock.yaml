@@ -4,6 +4,9 @@ dependencies:
   http-serve:
     specifier: ^1.0.1
     version: 1.0.1
+  monaco-editor:
+    specifier: ^0.41.0
+    version: 0.41.0
 
 packages:
 
@@ -97,6 +100,10 @@ packages:
     hasBin: true
     dependencies:
       minimist: 1.2.8
+    dev: false
+
+  /monaco-editor@0.41.0:
+    resolution: {integrity: sha512-1o4olnZJsiLmv5pwLEAmzHTE/5geLKQ07BrGxlF4Ri/AXAc2yyDGZwHjiTqD8D/ROKUZmwMA28A+yEowLNOEcA==}
     dev: false
 
   /opener@1.4.3:

@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "pnpm exec http-serve ./docs",
+    "serve": "pnpm exec http-serve .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "http-serve": "^1.0.1"
+    "http-serve": "^1.0.1",
+    "monaco-editor": "^0.41.0"
   }
 }
